@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Weather from "./Weather";
 import Calendar from "./Calendar";
 import "./News.css";
 import userImg from "../assets/images/user.jpg";
+import techImg from "../assets/images/tech.jpg";
+import sportsImg from "../assets/images/sports.jpg";
+import scienceImg from "../assets/images/science.jpg";
+import worldImg from "../assets/images/world.jpg";
+import healthImg from "../assets/images/health.jpg";
+import nationImg from "../assets/images/nation.jpg";
+import axios from "axios";
 
 const News = () => {
+  const [headline, setHeadline] = useState(null);
+  const [news, setNews] = useState([]);
+  useEffect(() => {
+    const fetchNews = async () => {
+      const url = 'https://gnews.io/api/v4/top-headlines?category=general&lang=en&apikey=5ab39b6b2b87610b3cb4bfce51d6c908';
+      const response = await axios.get(url);
+      const fetchedNews = response.data.articles;
+      setHeadline(fetchedNews[0]);
+      setNews(fetchedNews);
+    }
+    fetchNews();
+  }, []);
   return (
     <div className="news">
       <header className="news-header">
@@ -41,8 +60,54 @@ const News = () => {
           </nav>
         </div>
         <div className="news-section">
-          <div className="headline">Headline</div>
-          <div className="news-grid">News Grid</div>
+          <div className="headline">
+            {headline && (
+              <>
+                <img src={headline.image} alt={headline.title} />
+                <h2 className="headline-title">{headline.title}
+                  <i className="fa-regular fa-bookmark bookmark"></i>
+                </h2>
+              </>
+            )}
+          </div>
+          <div className="news-grid">
+            <div className="news-grid-item">
+              <img src={techImg} alt="News Image" />
+              <h3>fsfksdj fsldkjh fsdjk laskjf asfsdkjla
+                <i className="fa-regular fa-bookmark bookmark"></i>
+              </h3>
+            </div>
+            <div className="news-grid-item">
+              <img src={sportsImg} alt="News Image" />
+              <h3>fsfksdj fsldkjh fsdjk laskjf asfsdkjla
+                <i className="fa-regular fa-bookmark bookmark"></i>
+              </h3>
+            </div>
+            <div className="news-grid-item">
+              <img src={scienceImg} alt="News Image" />
+              <h3>fsfksdj fsldkjh fsdjk laskjf asfsdkjla
+                <i className="fa-regular fa-bookmark bookmark"></i>
+              </h3>
+            </div>
+            <div className="news-grid-item">
+              <img src={worldImg} alt="News Image" />
+              <h3>fsfksdj fsldkjh fsdjk laskjf asfsdkjla
+                <i className="fa-regular fa-bookmark bookmark"></i>
+              </h3>
+            </div>
+            <div className="news-grid-item">
+              <img src={healthImg} alt="News Image" />
+              <h3>fsfksdj fsldkjh fsdjk laskjf asfsdkjla
+                <i className="fa-regular fa-bookmark bookmark"></i>
+              </h3>
+            </div>
+            <div className="news-grid-item">
+              <img src={nationImg} alt="News Image" />
+              <h3>fsfksdj fsldkjh fsdjk laskjf asfsdkjla
+                <i className="fa-regular fa-bookmark bookmark"></i>
+              </h3>
+            </div>
+          </div>
         </div>
         <div className="my-blogs">My Blogs</div>
         <div className="weather-calendar">
