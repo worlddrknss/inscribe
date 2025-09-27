@@ -18,9 +18,9 @@
   stage: build
   script:
     # Normalize tags to lowercase
-    - IMAGE_SHA=$(echo "${CI_REGISTRY_IMAGE}/${SERVICE}:${CI_COMMIT_SHA}" | tr '[:upper:]' '[:lower:]')
-    - IMAGE_LATEST=$(echo "${CI_REGISTRY_IMAGE}/${SERVICE}:latest" | tr '[:upper:]' '[:lower:]')
-    - IMAGE_BUILD=$(echo "${CI_REGISTRY_IMAGE}/${SERVICE}:build-${CI_PIPELINE_IID}" | tr '[:upper:]' '[:lower:]')
+    - IMAGE_SHA=$(echo "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}" | tr '[:upper:]' '[:lower:]')
+    - IMAGE_LATEST=$(echo "${CI_REGISTRY_IMAGE}:latest" | tr '[:upper:]' '[:lower:]')
+    - IMAGE_BUILD=$(echo "${CI_REGISTRY_IMAGE}:build-${CI_PIPELINE_IID}" | tr '[:upper:]' '[:lower:]')
 
     - echo "🐳 Building $IMAGE_SHA"
     - docker pull "$IMAGE_LATEST" || true
