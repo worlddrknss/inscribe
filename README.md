@@ -1,5 +1,6 @@
 # Inscribe
 
+[![pipeline status](https://gitlab.com/astryx-labs/Inscribe/badges/main/pipeline.svg)](https://gitlab.com/astryx-labs/Inscribe/-/commits/main)
 [![React](https://img.shields.io/badge/React-18.x-blue.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-Latest-646CFF.svg)](https://vitejs.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -64,6 +65,22 @@ src/
 
 - Node.js (version 16.x or higher)
 - npm or yarn package manager
+- GNews.io API key (required for news data fetching)
+
+### API Configuration
+
+This application requires a GNews.io API key to fetch news data. Follow these steps to set up your API key:
+
+1. Visit [GNews.io](https://gnews.io/) and create a free account
+2. Generate your API key from the dashboard
+3. Create a `.env` file in the root directory of the project
+4. Add your API key to the `.env` file:
+
+   ```env
+   VITE_GNEWS_API_KEY=your_api_key_here
+   ```
+
+**Important**: Never commit your `.env` file to version control. The `.env` file should be added to `.gitignore`.
 
 ### Installation
 
@@ -80,13 +97,15 @@ src/
    npm install
    ```
 
-3. Start the development server:
+3. Configure your API key (see API Configuration section above)
+
+4. Start the development server:
 
    ```bash
    npm run dev
    ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+5. Open your browser and navigate to `http://localhost:5173`
 
 ### Available Scripts
 
@@ -123,10 +142,19 @@ This project uses ESLint for maintaining code quality and consistency. The confi
 
 The application demonstrates various API integration patterns:
 
+- **GNews.io Integration**: Uses GNews.io API for fetching real-time news articles and content
 - RESTful API consumption
 - Error handling and loading states
 - Data caching strategies
 - Real-time data updates
+
+### GNews.io API Features
+
+- Access to thousands of news sources worldwide
+- Real-time news article fetching
+- Category-based news filtering
+- Search functionality across news content
+- Rate limiting and quota management
 
 ## Browser Support
 
