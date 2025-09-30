@@ -11,6 +11,8 @@
 
 A comprehensive React application demonstrating modern web development patterns including API integration, state management, and responsive design.
 
+![Inscribe Screenshot](screenshot.png)
+
 ## Overview
 
 Inscribe is a feature-rich web application built with React and Vite that showcases essential modern web development concepts. The application provides a news aggregation platform with blogging capabilities, user interaction features, and responsive design principles.

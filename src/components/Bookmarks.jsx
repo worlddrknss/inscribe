@@ -1,7 +1,9 @@
 import React from "react";
 import "./Modal.css";
-import noImg from "../assets/images/no-img.png";
 import "./Bookmarks.css";
+
+// Add a fallback image path or import
+const noImg = "/images/no-image.png"; // Update the path as needed
 
 const Bookmarks = ({
   show,

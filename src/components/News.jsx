@@ -7,29 +7,32 @@ import noImg from "../assets/images/no-img.png";
 import axios from "axios";
 import NewsModal from "./NewsModal";
 import Bookmarks from "./Bookmarks";
+import BlogsModal from "./BlogsModal";
 
 const categories = [
-  "General",
-  "World",
-  "Business",
-  "Technology",
-  "Entertainment",
-  "Sports",
-  "Science",
-  "Health",
-  "Nation",
+  "general",
+  "world",
+  "business",
+  "technology",
+  "entertainment",
+  "sports",
+  "science",
+  "health",
+  "nation",
 ];
 
-const News = () => {
+const News = ({ onShowBlogs, blogs, onEditBlog, onDeleteBlog }) => {
   const [headline, setHeadline] = useState(null);
   const [news, setNews] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("Technology");
+  const [selectedCategory, setSelectedCategory] = useState("technology");
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [selectedArticle, setSeletcedArticle] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
   const [showBookmarksModal, setShowBookmarksModal] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [showBlogModal, setShowBlogModal] = useState(false);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -43,14 +46,21 @@ const News = () => {
 
       const response = await axios.get(url);
       const fetchedNews = response.data.articles;
+
       fetchedNews.forEach((article) => {
         if (!article.image) {
           article.image = noImg;
         }
       });
+
       setHeadline(fetchedNews[0]);
       setNews(fetchedNews.slice(1, 7));
+
+      const savedBookmarks =
+        JSON.parse(localStorage.getItem("bookmarks")) || [];
+      setBookmarks(savedBookmarks);
     };
+
     fetchNews();
   }, [selectedCategory, searchQuery]);
 
@@ -59,14 +69,14 @@ const News = () => {
     setSelectedCategory(category);
   };
 
-  const handleSearchSubmit = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
     setSearchQuery(searchInput);
     setSearchInput("");
   };
 
   const handleArticleClick = (article) => {
-    setSelectedArticle(article);
+    setSeletcedArticle(article);
     setShowModal(true);
   };
 
@@ -82,15 +92,25 @@ const News = () => {
     });
   };
 
+  const handleBlogClick = (blog) => {
+    setSelectedPost(blog);
+    setShowBlogModal(true);
+  };
+
+  const closeBlogModal = () => {
+    setShowBlogModal(false);
+    setSelectedPost(null);
+  };
+
   return (
     <div className="news">
       <header className="news-header">
         <h1 className="logo">Inscribe</h1>
         <div className="search-bar">
-          <form onSubmit={handleSearchSubmit}>
+          <form onSubmit={handleSearch}>
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search News..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
             />
@@ -102,9 +122,9 @@ const News = () => {
       </header>
       <div className="news-content">
         <div className="navbar">
-          <div className="user">
-            <img src={userImg} alt="User" />
-            <p>WorldDrknss Blog</p>
+          <div className="user" onClick={onShowBlogs}>
+            <img src={userImg} alt="User Image" />
+            <p>Charles' Blog</p>
           </div>
           <nav className="categories">
             <h1 className="nav-heading">Categories</h1>
@@ -112,8 +132,8 @@ const News = () => {
               {categories.map((category) => (
                 <a
                   href="#"
-                  className="nav-link"
                   key={category}
+                  className="nav-link"
                   onClick={(e) => handleCategoryClick(e, category)}
                 >
                   {category}
@@ -130,32 +150,31 @@ const News = () => {
           </nav>
         </div>
         <div className="news-section">
-          <div
-            className="headline"
-            onClick={() => handleArticleClick(headline)}
-          >
-            {headline && (
-              <>
-                <img src={headline.image || noImg} alt={headline.title} />
-                <h2 className="headline-title">
-                  {headline.title}
-                  <i
-                    className={`${
-                      bookmarks.some(
-                        (bookmark) => bookmark.title === headline.title
-                      )
-                        ? "fa-solid"
-                        : "fa-regular"
-                    } fa-bookmark bookmark`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleBookmarkClick(headline);
-                    }}
-                  ></i>
-                </h2>
-              </>
-            )}
-          </div>
+          {headline && (
+            <div
+              className="headline"
+              onClick={() => handleArticleClick(headline)}
+            >
+              <img src={headline.image || noImg} alt={headline.title} />
+              <h2 className="headline-title">
+                {headline.title}
+                <i
+                  className={`${
+                    bookmarks.some(
+                      (bookmark) => bookmark.title === headline.title
+                    )
+                      ? "fa-solid"
+                      : "fa-regular"
+                  } fa-bookmark bookmark`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleBookmarkClick(headline);
+                  }}
+                ></i>
+              </h2>
+            </div>
+          )}
+
           <div className="news-grid">
             {news.map((article, index) => (
               <div
@@ -196,13 +215,56 @@ const News = () => {
           onSelectArticle={handleArticleClick}
           onDeleteBookmark={handleBookmarkClick}
         />
-        <div className="my-blogs">My Blogs</div>
+        <div className="my-blogs">
+          <h1 className="my-blogs-heading">My Blogs</h1>
+          <div className="blog-posts">
+            {blogs.map((blog, index) => (
+              <div
+                key={index}
+                className="blog-post"
+                onClick={() => handleBlogClick(blog)}
+              >
+                <img src={blog.image || noImg} alt={blog.title} />
+                <h3>{blog.title}</h3>
+                <div className="post-buttons">
+                  <button
+                    className="edit-post"
+                    onClick={() => onEditBlog(blog)}
+                  >
+                    <i className="bx bxs-edit"></i>
+                  </button>
+                  <button
+                    className="delete-post"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteBlog(blog);
+                    }}
+                  >
+                    <i className="bx bxs-x-circle"></i>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          {selectedPost && showBlogModal && (
+            <BlogsModal
+              show={showBlogModal}
+              blog={selectedPost}
+              onClose={closeBlogModal}
+            />
+          )}
+        </div>
         <div className="weather-calendar">
           <Weather />
           <Calendar />
         </div>
       </div>
-      <footer className="news-footer">Footer</footer>
+      <footer className="news-footer">
+        <p>
+          <span>Your Personal Space</span>
+        </p>
+        <p>&copy; All Right Reserved.</p>
+      </footer>
     </div>
   );
 };

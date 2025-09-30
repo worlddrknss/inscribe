@@ -8,7 +8,7 @@
 }
 
 .modal-title {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: "Bebas Neue", sans-serif;
   font-size: 2rem;
   color: #fff;
   letter-spacing: 0.1rem;
@@ -17,7 +17,7 @@
 
 .modal-source,
 .modal-date {
-  font-family: 'Comfortaa', sans-serif;
+  font-family: "Comfortaa", sans-serif;
   font-size: 1.4rem;
   color: #bbb;
   margin-top: 1rem;
